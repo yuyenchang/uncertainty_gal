@@ -29,8 +29,8 @@ The Galaxy Project processes astronomical data, specifically galaxy images in FI
 1. **Clone the repository**:
 
 ```bash
-git clone https://github.com/yuyenchang/uncertainty_gal.git
-cd uncertainty_gal
+ git clone https://github.com/yuyenchang/uncertainty_gal.git
+ cd uncertainty_gal
 
 2. **Install dependencies**:
 
@@ -57,6 +57,7 @@ This will process the images, train models with different uncertainty estimation
 Generated plots show true vs. predicted values along with uncertainty intervals for each method.
 
 ## Directory Structure
+
 
 uncertainty_gal/
 ├── main.py                     # Main script to run the entire pipeline

@@ -50,7 +50,7 @@ Ensure _table.txt contains the necessary metadata and target values.
 2. **Run the Main Script**:
 
  ```bash
-python main.py
+python3 main.py
 ```
 
 This will process the images, train models with different uncertainty estimation methods, and save the result plots in the  directory.

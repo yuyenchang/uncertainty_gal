@@ -71,6 +71,7 @@ uncertainty_gal/
 ├── _img/                       # Directory containing galaxy image files in FITS format
 ├── requirements.txt            # List of required packages
 └── uncertainty_gal.png         # Plot showing predicted vs. actual values with uncertainty
+ ```
 
 ## Uncertainty Estimation Methods
 This project includes the following methods for uncertainty estimation:

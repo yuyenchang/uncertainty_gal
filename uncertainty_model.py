@@ -12,7 +12,7 @@ from keras.preprocessing.image import ImageDataGenerator
 class UncertaintyModel:
     """Class to define and train the Keras model with uncertainty estimation."""
 
-    def __init__(self, input_shape, model_type="dropout", n_ensemble=3, n_bootstrap=3):
+    def __init__(self, input_shape, model_type="dropout", n_ensemble=5, n_bootstrap=5):
         """
         Initialize the model with specified model type.
         

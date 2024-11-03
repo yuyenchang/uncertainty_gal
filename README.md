@@ -19,7 +19,7 @@ The Galaxy Project processes astronomical data, specifically galaxy images in FI
 
 ## Features
 
-- **Data Preprocessing**: Loads and normalizes galaxy images from FITS files, applies PCA for dimensionality reduction.
+- **Data Preprocessing**: Loads and normalizes galaxy images from FITS files.
 - **Deep Learning Models**: Implements convolutional neural networks (CNNs) for regression tasks.
 - **Uncertainty Estimation**: Supports various methods, including dropout, Bayesian neural networks, ensemble, and bootstrap.
 - **Visualization**: Plots true vs. predicted values with uncertainty intervals.

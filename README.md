@@ -84,5 +84,7 @@ This project includes the following methods for uncertainty estimation:
 ## Results
 For each uncertainty estimation method, the project generates scatter plots of true vs. predicted galaxy properties with uncertainty intervals. These plots provide insights into model accuracy and uncertainty levels, helping to identify the most reliable methods for this dataset.
 
+<img src="https://github.com/yuyenchang/uncertainty_gal/blob/main/uncertainty_gal.png" alt="Example Image" style="width:80%;"/>
+
 ## License
 This project is licensed under the MIT License.

@@ -1,4 +1,4 @@
-# Uncertainty Quantification for Galaxies
+# Uncertainty Quantification for Galaxy Mass
 
 This project analyzes James Webb Space Telescope (JWST) images using deep learning models to estimate galaxy properties and quantify uncertainty. The code includes data preprocessing, model training with various uncertainty estimation methods, and visualization of results.
 

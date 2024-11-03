@@ -57,7 +57,7 @@ This will process the images, train models with different uncertainty estimation
 
 3. **Results**:
 
-Generated plots show true vs. predicted values along with uncertainty intervals for each method.
+Generated plots show original vs. predicted values along with uncertainty intervals for each method.
 
 ## Directory Structure
 
@@ -67,10 +67,10 @@ uncertainty_gal/
 ├── data_preprocessor.py        # Handles data loading and preprocessing
 ├── uncertainty_model.py        # Defines the model architecture and uncertainty estimation
 ├── regression_evaluator.py     # Performs evaluation and cross-validation
-├── _table.txt                   # Metadata and target values for images
-├── _img/                        # Directory containing galaxy image files in FITS format
-└── requirements.txt            # List of required packages
- ```
+├── _table.txt                  # Metadata and target values for images
+├── _img/                       # Directory containing galaxy image files in FITS format
+├── requirements.txt            # List of required packages
+└── uncertainty_gal.png         # Plot showing predicted vs. actual values with uncertainty
 
 ## Uncertainty Estimation Methods
 This project includes the following methods for uncertainty estimation:

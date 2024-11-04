@@ -146,14 +146,13 @@ class UncertaintyModel:
         - mean_prediction (numpy.ndarray): The average of the bootstrap predictions.
         - uncertainty (numpy.ndarray): The standard deviation of the bootstrap predictions.
         """
-
         bootstrap_predictions = np.array([model.predict(x, verbose=0).flatten() for model in self.models])  # Predict with each bootstrap sample
         mean_prediction = bootstrap_predictions.mean(axis=0)  # Average bootstrap predictions
         uncertainty = bootstrap_predictions.std(axis=0)  # Compute standard deviation for uncertainty
         return mean_prediction, uncertainty
 
     def fit_model(self, X_train, y_train, X_val, y_val, epochs=100):
-       """Train the model, ensemble, or bootstrap models with early stopping and learning rate reduction.
+        """Train the model, ensemble, or bootstrap models with early stopping and learning rate reduction.
         
         Applies data augmentation for improved model generalization.
         Early stopping prevents overfitting by halting training on validation performance plateau.

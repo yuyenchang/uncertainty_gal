@@ -124,14 +124,14 @@ def plot_uncertainty_results(y_true, y_16, y_84, results, y_min, y_max):
     
     # Create subplots grid for each model type
     fig, axs = plt.subplots(2, 2, figsize=(12, 12))
-    fig.suptitle('True vs Predicted Values with Different Uncertainty Methods')
+    fig.suptitle('Original vs Predicted Values with Different Uncertainty Methods')
 
     # Iterate over each model type and plot results
     for i, (model_type, (y_pred, y_uncertainty)) in enumerate(results.items()):
         # Select subplot for this model
         ax = axs[i // 2, i % 2]
 
-        # Scatter plot of true vs predicted values
+        # Scatter plot of original vs predicted values
         ax.scatter(y_true, y_pred, marker='.', s=3, alpha=0.8)
         
         # Add error bars for uncertainty around predicted values
@@ -146,7 +146,7 @@ def plot_uncertainty_results(y_true, y_16, y_84, results, y_min, y_max):
         ax.set_ylim([y_min, y_max])
         
         # Label axes and add title
-        ax.set_xlabel('True Values')
+        ax.set_xlabel('Original Values')
         ax.set_ylabel('Predicted Values')
         ax.set_title(f'{model_type.upper()} Uncertainty')
         ax.legend()

@@ -2,13 +2,6 @@
 
 This project analyzes James Webb Space Telescope (JWST) images using deep learning models to estimate galaxy properties and quantify uncertainty. The code includes data preprocessing, model training with various uncertainty estimation methods, and visualization of results.
 
-## Features
-
-- **Data Preprocessing**: Loads and normalizes galaxy images from FITS files.
-- **Deep Learning Models**: Implements convolutional neural networks (CNNs) for regression tasks.
-- **Uncertainty Estimation**: Supports various methods, including dropout, Bayesian neural networks, ensemble, and bootstrap.
-- **Visualization**: Plots true vs. predicted values with uncertainty intervals.
-
 ## Installation
 
 1. **Clone the repository**:
@@ -58,6 +51,13 @@ uncertainty_gal/
 ├── requirements.txt            # List of required packages
 └── uncertainty_gal.png         # Plot showing predicted vs. actual values with uncertainty
  ```
+
+## Features
+
+- **Data Preprocessing**: Loads and normalizes galaxy images from FITS files.
+- **Deep Learning Models**: Implements convolutional neural networks (CNNs) for regression tasks.
+- **Uncertainty Estimation**: Supports various methods, including dropout, Bayesian neural networks, ensemble, and bootstrap.
+- **Visualization**: Plots true vs. predicted values with uncertainty intervals.
 
 ## Uncertainty Estimation Methods
 This project includes the following methods for uncertainty estimation:

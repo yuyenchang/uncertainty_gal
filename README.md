@@ -55,8 +55,8 @@ uncertainty_gal/
 ## Uncertainty Estimation Methods
 This project includes the following methods for uncertainty estimation:
 
-1. **Monte Carlo (MC) Dropout**: Uses Monte Carlo dropout to drop neurons and average forward passes for uncertainty.
-2. **Bayesian Neural Network (BNN)**: Uses Bayesian layers with averaged forward passes to capture uncertainty.
+1. **Dropout**: Uses Monte Carlo dropout to drop neurons and average forward passes for uncertainty.
+2. **BNN**: Uses Bayesian layers with averaged forward passes to capture uncertainty.
 3. **Ensemble**: Trains multiple models to estimate prediction uncertainty.
 4. **Bootstrap**: Employs resampling techniques to estimate prediction uncertainty.
 

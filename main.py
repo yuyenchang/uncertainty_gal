@@ -1,4 +1,5 @@
-# Import necessary libraries
+# main.py
+
 import numpy as np  # For numerical operations
 import pandas as pd  # For data manipulation
 import matplotlib.pyplot as plt  # For plotting
@@ -9,7 +10,13 @@ from keras.metrics import MeanSquaredError, MeanAbsoluteError  # Metrics to eval
 
 # Function to load the data
 def load_data():
-    """Load the tabular data and associated image files."""
+    """Load the tabular data and associated image files.
+    
+    This function integrates tabular and image data, 
+    which allows for joint analysis of structured and unstructured data. 
+    The use of tabular metadata with image data can improve model accuracy, 
+    especially when predicting astrophysical targets that benefit from both types of features.
+    """
     # Load table data from text file
     # The table file '_table.txt' contains target values and metadata for each data instance
     data = pd.read_csv('_table.txt', sep='\s+')
@@ -41,7 +48,12 @@ def load_data():
 
 # Function to preprocess data for modeling
 def preprocess_data(images, y_true):
-    """Normalize images and rescale target values for consistent model input."""
+    """Normalize images and rescale target values for consistent model input.
+    
+    Normalization ensures that all data channels are on a comparable scale, 
+    which can improve training stability and model performance.
+    Target value rescaling to [0, 1] helps models with better convergence.
+    """
     # Initialize preprocessor for image normalization
     preprocessor = DataPreprocessor()
     
@@ -58,7 +70,18 @@ def preprocess_data(images, y_true):
 
 # Function to evaluate different models with uncertainty estimation methods
 def evaluate_models(X, y_normalized, y_min, y_max, y_true, y_16, y_84):
-    """Evaluate models using various uncertainty estimation techniques and collect results."""
+    """Evaluate models using various uncertainty estimation techniques and collect results.
+    
+    The choice of uncertainty estimation techniques ('dropout', 'bnn', 'ensemble', 'bootstrap') 
+    provides flexibility in the analysis. Each method has distinct assumptions and strengths:
+    
+    - Dropout: Estimates uncertainty by randomly dropping units, useful for model variance estimation.
+    - BNN (Bayesian Neural Networks): Integrates Bayesian uncertainty, although computationally expensive.
+    - Ensemble: Combines predictions from multiple models, reducing variance and improving robustness.
+    - Bootstrap: Resamples the dataset, effective for estimating statistical uncertainty.
+    
+    These techniques enable a better understanding of model predictions' reliability and robustness.
+    """
     # Define model types to evaluate
     model_types = ["dropout", "bnn", "ensemble", "bootstrap"]
     
@@ -89,7 +112,13 @@ def evaluate_models(X, y_normalized, y_min, y_max, y_true, y_16, y_84):
 
 # Function to visualize uncertainty results
 def plot_uncertainty_results(y_true, y_16, y_84, results, y_min, y_max):
-    """Plot true vs predicted values with uncertainty bars for each model type."""
+    """Plot true vs predicted values with uncertainty bars for each model type.
+    
+    Visualization of model uncertainty provides insights into prediction confidence. 
+    The use of error bars and perfect prediction lines helps validate model performance and 
+    highlights discrepancies. This is essential for assessing if model uncertainty estimates 
+    align with actual data variability.
+    """
     # Set font size for all plots
     plt.rcParams.update({'font.size': 16})
     
@@ -129,6 +158,13 @@ def plot_uncertainty_results(y_true, y_16, y_84, results, y_min, y_max):
 
 # Main function to execute the steps
 def main():
+    """
+    Main function to load data, preprocess it, evaluate models with uncertainty estimation, 
+    and visualize the results.
+    
+    This workflow integrates data loading, preprocessing, model evaluation, and visualization.
+    Each step contributes to a reliable uncertainty quantification framework for the model's predictions.
+    """
     # Load data (images and target values)
     images, y_16, y_true, y_84 = load_data()
     

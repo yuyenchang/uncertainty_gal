@@ -9,19 +9,40 @@ class DataPreprocessor:
     """Class for data loading and preprocessing functions."""
 
     def load_image(self, file_path):
-        """Load image data from a FITS file."""
+        """Load image data from a FITS file.
+        
+        FITS format is commonly used in astrophysics for storing image data, 
+        making it a suitable choice for loading and analyzing scientific images 
+        in this model. The FITS file structure allows for metadata storage, 
+        which can be useful for additional contextual information if needed.
+        """
         with fits.open(file_path) as hdul:
             return hdul[0].data  # Opens FITS file and returns the image data from the first HDU (Header/Data Unit)
 
     def normalize_channels(self, images):
+        """Normalize each channel in the image batch.
+        
+        Scaling images to a uniform range (0 to 1) allows for consistent model 
+        training. Here, MinMaxScaler is used for scaling, as it is appropriate 
+        for image data where pixel values typically range within known limits.
+        Normalizing each channel individually can also help in cases where channels 
+        might represent different physical properties, reducing bias toward any particular channel.
+        """
         for i in range(images.shape[1]):  # Iterate over each channel in the image batch
-            scaler =  MinMaxScaler() # Replace with StandardScaler() if desired
-            reshaped = images[:, i, :, :].reshape(images.shape[0], -1) # Flatten each image in this channel
-            images[:, i, :, :] = scaler.fit_transform(reshaped).reshape(images.shape[0], images.shape[2], images.shape[3]) # Standardize each channel
+            scaler = MinMaxScaler()  # Replace with StandardScaler() if desired
+            reshaped = images[:, i, :, :].reshape(images.shape[0], -1)  # Flatten each image in this channel
+            images[:, i, :, :] = scaler.fit_transform(reshaped).reshape(images.shape[0], images.shape[2], images.shape[3])  # Standardize each channel
         return images  # Return the normalized images
 
     def apply_pca(self, images, n_components=4):
-        """Apply PCA to each image's channels for dimensionality reduction."""
+        """Apply PCA to each image's channels for dimensionality reduction.
+        
+        PCA is used to reduce the dimensionality while preserving the main features 
+        in the image data, especially beneficial for high-dimensional datasets like images. 
+        This technique reduces computational cost and memory usage, making training faster 
+        without significant information loss. Here, `n_components=4` is chosen to match 
+        the original number of channels, maintaining interpretability across channels.
+        """
         new_images = np.zeros((images.shape[0], n_components, images.shape[2], images.shape[3]))  # Initialize new array for transformed images
         for i in range(images.shape[0]):  # Iterate over each image in the batch
             reshaped_image = images[i].reshape(images.shape[1], -1).T  # Flatten each channel in the image for PCA
@@ -43,6 +64,11 @@ class UncertaintyModel:
         - model_type (str): Type of model to create, "dropout", "bnn", "ensemble", or "bootstrap".
         - n_ensemble (int): Number of models in the ensemble if model_type="ensemble" or "bootstrap".
         - n_bootstrap (int): Number of bootstrap samples if model_type="bootstrap".
+        
+        The choice of model type affects uncertainty quantification:
+        - "dropout" applies Monte Carlo Dropout for variance estimation.
+        - "bnn" uses Bayesian Neural Network layers for epistemic uncertainty.
+        - "ensemble" and "bootstrap" leverage multiple models to reduce bias and variance.
         """
         self.model_type = model_type  # Store the type of model for uncertainty
         self.n_ensemble = n_ensemble if model_type == "ensemble" else n_bootstrap  # Set number of models if ensemble/bootstrap
@@ -59,7 +85,14 @@ class UncertaintyModel:
             return [self.create_dropout_model(input_shape) for _ in range(self.n_ensemble)]  # Create multiple models
 
     def create_dropout_model(self, input_shape):
-        """Create and compile a dropout model for uncertainty estimation."""
+        """Create and compile a dropout model for uncertainty estimation.
+        
+        The model uses Conv2D layers with ReLU activations to capture non-linear spatial features.
+        Dropout layers are added to approximate Bayesian inference, using Monte Carlo Dropout 
+        during prediction to estimate predictive uncertainty. The choice of `loss='mean_squared_error'` 
+        for regression aligns with the goal of minimizing prediction error. Activation functions and 
+        architecture are chosen to balance computational efficiency and model complexity.
+        """
         model = Sequential()  # Initialize a Sequential model
         model.p = 0.8  # Set retention probability for dropout
         model.weight_decay = 1e-8  # Set weight decay for regularization
@@ -80,7 +113,13 @@ class UncertaintyModel:
         return model  # Return the compiled model
 
     def create_bnn_model(self, input_shape):
-        """Create and compile a Bayesian neural network model with modified Dense layers."""
+        """Create and compile a Bayesian neural network model with modified Dense layers.
+        
+        Bayesian layers (`DenseFlipout`) provide epistemic uncertainty, capturing 
+        model uncertainty, which is valuable in cases where the dataset may not 
+        cover all possible scenarios. `tfpl.DenseFlipout` layers are more computationally 
+        demanding than standard dense layers but offer improved uncertainty estimates.
+        """
         model = Sequential()
         model.p = 1.0  # Set retention probability for dropout
         model.weight_decay = 0.0  # Set weight decay for regularization
@@ -99,7 +138,13 @@ class UncertaintyModel:
         return model
 
     def predict_with_uncertainty(self, x, n_iter=100):
-        """Predict with the specified model type to estimate uncertainty."""
+        """Predict with the specified model type to estimate uncertainty.
+        
+        For dropout and BNN, Monte Carlo sampling is used to obtain uncertainty estimates. 
+        A large number of iterations (`n_iter=100`) is set to ensure stable uncertainty 
+        quantification by capturing prediction variance. `tau` is calculated to account for 
+        the effect of dropout probability and weight decay, providing a robust estimation of predictive uncertainty.
+        """
         if self.model_type == "ensemble":
             return self.predict_with_ensemble(x)  # Use ensemble method
         elif self.model_type == "bootstrap":
@@ -118,21 +163,38 @@ class UncertaintyModel:
             return mean_prediction, np.sqrt(variance)  # Return mean prediction and adjusted uncertainty
 
     def predict_with_ensemble(self, x):
-        """Predict with ensemble of models to estimate uncertainty."""
+        """Predict with ensemble of models to estimate uncertainty.
+        
+        The ensemble method combines multiple models trained on the same data, 
+        providing diverse perspectives on predictions. Variance across predictions 
+        is used to estimate uncertainty, particularly effective for capturing 
+        aleatoric uncertainty in the dataset.
+        """
         ensemble_predictions = np.array([model.predict(x, verbose=0).flatten() for model in self.models])  # Predict with each ensemble model
         mean_prediction = ensemble_predictions.mean(axis=0)  # Average predictions
         uncertainty = ensemble_predictions.std(axis=0)  # Compute standard deviation for uncertainty
         return mean_prediction, uncertainty
 
     def predict_with_bootstrap(self, x):
-        """Predict with bootstrap models to estimate uncertainty."""
+        """Predict with bootstrap models to estimate uncertainty.
+        
+        Bootstrap replicates the training process with different data samples, 
+        which helps in capturing dataset variability. The approach is robust in 
+        estimating uncertainty where data may be noisy or contain outliers.
+        """
         bootstrap_predictions = np.array([model.predict(x, verbose=0).flatten() for model in self.models])  # Predict with each bootstrap sample
         mean_prediction = bootstrap_predictions.mean(axis=0)  # Average bootstrap predictions
         uncertainty = bootstrap_predictions.std(axis=0)  # Compute standard deviation for uncertainty
         return mean_prediction, uncertainty
 
     def fit_model(self, X_train, y_train, X_val, y_val, epochs=100):
-        """Train the model, ensemble, or bootstrap models with early stopping and learning rate reduction."""
+        """Train the model, ensemble, or bootstrap models with early stopping and learning rate reduction.
+        
+        Data augmentation (rotation, horizontal flip) is applied to enrich the training set, 
+        making the model more robust to variations in input. Early stopping and learning rate 
+        reduction help prevent overfitting by stopping training at an optimal point and adjusting 
+        the learning rate for smooth convergence.
+        """
         datagen = ImageDataGenerator(rotation_range=180, horizontal_flip=True, fill_mode='nearest', data_format='channels_first')
         datagen.fit(X_train)  # Fit data generator to training data for data augmentation
         early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)  # Early stopping to prevent overfitting

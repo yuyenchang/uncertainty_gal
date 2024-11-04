@@ -2,21 +2,6 @@
 
 This project analyzes James Webb Space Telescope (JWST) images using deep learning models to estimate galaxy properties and quantify uncertainty. The code includes data preprocessing, model training with various uncertainty estimation methods, and visualization of results.
 
-## Table of Contents
-
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Directory Structure](#directory-structure)
-- [Uncertainty Estimation Methods](#uncertainty-estimation-methods)
-- [Results](#results)
-- [License](#license)
-
-## Project Overview
-
-The Galaxy Project processes astronomical data, specifically galaxy images in FITS format, and applies deep learning techniques to predict specific properties of galaxies. This project aims to implement several uncertainty estimation techniques, allowing for more robust predictions with a quantified level of uncertainty.
-
 ## Features
 
 - **Data Preprocessing**: Loads and normalizes galaxy images from FITS files.
@@ -39,12 +24,13 @@ cd uncertainty_gal
 pip install -r requirements.txt
 ```
 
-Make sure requirements.txt includes necessary packages such as numpy, pandas, tensorflow, keras, astropy, scikit-learn, and scipy.
+(The code was written in Python 3.9.1.)
 
 ## Usage
 1. **Prepare Data**:
 
 Place your FITS image files in an _img/ directory.
+
 Ensure _table.txt contains the necessary metadata and target values.
 
 2. **Run the Main Script**:
@@ -82,7 +68,8 @@ This project includes the following methods for uncertainty estimation:
 4. **Bootstrap**: Uses resampling techniques to estimate the uncertainty of predictions.
 
 ## Results
-For each uncertainty estimation method, the project generates scatter plots of true vs. predicted galaxy properties with uncertainty intervals. These plots provide insights into model accuracy and uncertainty levels, helping to identify the most reliable methods for this dataset.
+
+The project generates scatter plots of original vs. predicted galaxy properties with uncertainty intervals for each method, revealing model accuracy and identifying the most reliable methods.
 
 <img src="https://github.com/yuyenchang/uncertainty_gal/blob/main/uncertainty_gal.png" alt="Example Image" style="width:80%;"/>
 

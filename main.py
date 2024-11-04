@@ -1,12 +1,11 @@
 # main.py
 
-import numpy as np  # For numerical operations
-import pandas as pd  # For data manipulation
-import matplotlib.pyplot as plt  # For plotting
-from data_preprocessor import DataPreprocessor  # Custom module for preprocessing image data
-from uncertainty_model import UncertaintyModel  # Custom module for building uncertainty models
-from regression_evaluator import RegressionEvaluator  # Custom module for evaluating regression models
-from keras.metrics import MeanSquaredError, MeanAbsoluteError  # Metrics to evaluate model performance
+import numpy as np 
+import pandas as pd
+import matplotlib.pyplot as plt
+from data_preprocessor import DataPreprocessor
+from uncertainty_model import UncertaintyModel
+from regression_evaluator import RegressionEvaluator
 
 # Function to load the data
 def load_data():
@@ -22,7 +21,7 @@ def load_data():
     data = pd.read_csv('_table.txt', sep='\s+')
     
     # Extract target values and instance names
-    name = data['name'].values  # Array of instance names (assumed to be unique IDs)
+    name = data['name'].values  # Array of instance names
     y_16, y_true, y_84 = data['mstar16'].values, data['mstar50'].values, data['mstar84'].values  # Percentile values for target variables
     
     # Define the path where images are stored
@@ -75,9 +74,9 @@ def evaluate_models(X, y_normalized, y_min, y_max, y_true, y_16, y_84):
     The choice of uncertainty estimation techniques ('dropout', 'bnn', 'ensemble', 'bootstrap') 
     provides flexibility in the analysis. Each method has distinct assumptions and strengths:
     
-    - Dropout: Estimates uncertainty by randomly dropping units, useful for model variance estimation.
+    - Dropout: Estimates uncertainty by randomly dropping units, useful for model uncertainty estimation.
     - BNN (Bayesian Neural Networks): Integrates Bayesian uncertainty, although computationally expensive.
-    - Ensemble: Combines predictions from multiple models, reducing variance and improving robustness.
+    - Ensemble: Combines predictions from multiple models, reducing uncertainty and improving robustness.
     - Bootstrap: Resamples the dataset, effective for estimating statistical uncertainty.
     
     These techniques enable a better understanding of model predictions' reliability and robustness.

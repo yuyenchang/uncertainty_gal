@@ -55,7 +55,7 @@ class DataPreprocessor:
 class UncertaintyModel:
     """Class to define and train the Keras model with uncertainty estimation."""
 
-    def __init__(self, input_shape, model_type="dropout", n_ensemble=3, n_bootstrap=3):
+    def __init__(self, input_shape, model_type="dropout", n_ensemble=5, n_bootstrap=5):
         """
         Initialize the model with specified model type.
         
@@ -120,21 +120,21 @@ class UncertaintyModel:
         cover all possible scenarios. `tfpl.DenseFlipout` layers are more computationally 
         demanding than standard dense layers but offer improved uncertainty estimates.
         """
-        model = Sequential()
-        model.p = 1.0  # Set retention probability for dropout
-        model.weight_decay = 0.0  # Set weight decay for regularization
-        model.add(Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=input_shape))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Conv2D(64, (3, 3), activation='relu', padding='same'))
-        model.add(MaxPooling2D(pool_size=(2, 2), padding='same'))
-        model.add(Conv2D(128, (3, 3), activation='relu', padding='same'))
-        model.add(GlobalAveragePooling2D())
-        model.add(Flatten())
-        model.add(tfpl.DenseFlipout(256, activation='relu'))  # DenseFlipout layer for Bayesian uncertainty
-        model.add(Dense(128, activation='relu', kernel_regularizer=l2(model.weight_decay)))  # Add L2 regularization
-        model.add(Dense(64, activation='relu'))
-        model.add(Dense(1, activation='linear'))
-        model.compile(loss='mean_squared_error', optimizer='adam', metrics=[MeanSquaredError(), MeanAbsoluteError()])
+        model = Sequential()  # Initialize a Sequential model
+        model.p = 1.0  # Set retention probability for dropout (no dropout in this model)
+        model.weight_decay = 0.0  # Set weight decay to 0 for regularization
+        model.add(Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=input_shape))  # Conv layer with 32 filters
+        model.add(MaxPooling2D(pool_size=(2, 2)))  # Downsample using MaxPooling
+        model.add(Conv2D(64, (3, 3), activation='relu', padding='same'))  # Conv layer with 64 filters
+        model.add(MaxPooling2D(pool_size=(2, 2), padding='same'))  # Additional downsampling
+        model.add(Conv2D(128, (3, 3), activation='relu', padding='same'))  # Conv layer with 128 filters
+        model.add(GlobalAveragePooling2D())  # Reduce spatial dimensions globally
+        model.add(Flatten())  # Flatten the output for dense layers
+        model.add(tfpl.DenseFlipout(256, activation='relu'))  # Dense layer with Bayesian uncertainty (DenseFlipout)
+        model.add(Dense(128, activation='relu', kernel_regularizer=l2(model.weight_decay)))  # Dense layer with L2 regularization
+        model.add(Dense(64, activation='relu'))  # Dense layer with 64 units
+        model.add(Dense(1, activation='linear'))  # Output layer for regression
+        model.compile(loss='mean_squared_error', optimizer='adam', metrics=[MeanSquaredError(), MeanAbsoluteError()])  # Compile model with MSE loss
         return model
 
     def predict_with_uncertainty(self, x, n_iter=100):

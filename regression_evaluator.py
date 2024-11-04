@@ -37,7 +37,7 @@ class RegressionEvaluator:
             y_train, y_val = y[train_idx], y[val_idx]
             self.model.fit_model(X_train, y_train, X_val, y_val)  # Train model
 
-            # Predict with uncertainty estimation method (e.g., dropout, ensemble)
+            # Predict with uncertainty estimation method (e.g., dropout, bnn, ensemble, and bootstrap)
             y_pred, y_uncertainty = self.model.predict_with_uncertainty(X_val)
             y_pred_mean[val_idx], y_pred_std[val_idx] = y_pred, y_uncertainty  # Store predictions and uncertainties
 

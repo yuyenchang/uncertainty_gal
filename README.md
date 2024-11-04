@@ -17,7 +17,9 @@ cd uncertainty_gal
 pip install -r requirements.txt
 ```
 
-(The code was written in Python 3.9.1.)
+Notes:
+- Python 3.9.1 is recommended.
+- Use a virtual environment to avoid conflicts.
 
 ## Usage
 1. **Prepare Data**:

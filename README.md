@@ -1,6 +1,6 @@
 # Uncertainty Quantification for Galaxy Properties
 
-This project analyzes James Webb Space Telescope (JWST) images using deep learning models to estimate galaxy properties and quantify uncertainty. The code includes data preprocessing, model training with various uncertainty estimation methods, and visualization of results.
+This project analyzes James Webb Space Telescope (JWST) images using deep learning models to estimate stellar masses of galaxies and quantify uncertainty. The code includes data preprocessing, model training with various uncertainty estimation methods, and visualization of results.
 
 ## Installation
 
@@ -32,7 +32,7 @@ Ensure _table.txt contains the necessary metadata and target values.
 python3 main.py
 ```
 
-This will process the images, train models with different uncertainty estimation methods, and save the result plots in the  directory.
+This will process the images, train models with different uncertainty estimation methods, and save the result plots in the directory.
 
 3. **Results**:
 
@@ -55,14 +55,14 @@ uncertainty_gal/
 ## Uncertainty Estimation Methods
 This project includes the following methods for uncertainty estimation:
 
-1. **Dropout**: Monte Carlo Dropout to estimate uncertainty by randomly dropping neurons during inference.
-2. **Bayesian Neural Network (BNN)**: Uses Bayesian layers (DenseFlipout) for uncertainty estimation.
-3. **Ensemble**: Trains multiple models and computes the uncertainty in predictions.
-4. **Bootstrap**: Uses resampling techniques to estimate the uncertainty of predictions.
+1. **Dropout**: Uses Monte Carlo dropout to randomly drop neurons and average forward passes for uncertainty.
+2. **Bayesian Neural Network (BNN)**: Uses Bayesian layers with averaged forward passes to capture uncertainty.
+3. **Ensemble**: Trains multiple models to estimate prediction uncertainty.
+4. **Bootstrap**: Employs resampling techniques to estimate prediction uncertainty.
 
 ## Results
 
-The project generates scatter plots of original vs. predicted galaxy properties with uncertainty intervals for each method, revealing model accuracy and identifying the most reliable methods.
+The project generates scatter plots of original vs. predicted galaxy properties (stellar masses) with uncertainty intervals for each method, revealing model accuracy and identifying the most reliable methods.
 
 <img src="https://github.com/yuyenchang/uncertainty_gal/blob/main/uncertainty_gal.png" alt="Example Image" style="width:80%;"/>
 

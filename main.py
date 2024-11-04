@@ -10,11 +10,6 @@ from regression_evaluator import RegressionEvaluator
 # Function to load the data
 def load_data():
     """Load the tabular data and associated image files.
-    
-    This function integrates tabular and image data, 
-    which allows for joint analysis of structured and unstructured data. 
-    The use of tabular metadata with image data can improve model accuracy, 
-    especially when predicting astrophysical targets that benefit from both types of features.
     """
     # Load table data from text file
     # The table file '_table.txt' contains target values and metadata for each data instance
@@ -36,7 +31,7 @@ def load_data():
     
     # Load each image and assign to corresponding channels in the 4D array
     for i, idd in enumerate(name):
-        idd = str(name[i])  # Convert name to string if not already
+        idd = str(name[i])  # Convert name to string
         # Load images for different channels and store them in the images array
         images[i, 0, :, :] = preprocessor.load_image(path + idd + '_JWST_f115w.fits')  # Channel 1
         images[i, 1, :, :] = preprocessor.load_image(path + idd + '_JWST_f150w.fits')  # Channel 2
@@ -48,10 +43,6 @@ def load_data():
 # Function to preprocess data for modeling
 def preprocess_data(images, y_true):
     """Normalize images and rescale target values for consistent model input.
-    
-    Normalization ensures that all data channels are on a comparable scale, 
-    which can improve training stability and model performance.
-    Target value rescaling to [0, 1] helps models with better convergence.
     """
     # Initialize preprocessor for image normalization
     preprocessor = DataPreprocessor()
@@ -71,15 +62,15 @@ def preprocess_data(images, y_true):
 def evaluate_models(X, y_normalized, y_min, y_max, y_true, y_16, y_84):
     """Evaluate models using various uncertainty estimation techniques and collect results.
     
-    The choice of uncertainty estimation techniques ('dropout', 'bnn', 'ensemble', 'bootstrap') 
-    provides flexibility in the analysis. Each method has distinct assumptions and strengths:
+    This function supports methods like 'dropout', 'bnn', 'ensemble', and 'bootstrap', 
+    each with distinct strengths:
     
-    - Dropout: Estimates uncertainty by randomly dropping units, useful for model uncertainty estimation.
-    - BNN (Bayesian Neural Networks): Integrates Bayesian uncertainty, although computationally expensive.
-    - Ensemble: Combines predictions from multiple models, reducing uncertainty and improving robustness.
-    - Bootstrap: Resamples the dataset, effective for estimating statistical uncertainty.
+    - Dropout: Uses Monte Carlo dropout to estimate uncertainty through random neuron dropping.
+    - BNN: Incorporates Bayesian layers for uncertainty estimation.
+    - Ensemble: Trains multiple models for prediction uncertainty.
+    - Bootstrap: Uses resampling techniques for uncertainty estimation.
     
-    These techniques enable a better understanding of model predictions' reliability and robustness.
+    These methods enhance the understanding of model predictions' reliability.
     """
     # Define model types to evaluate
     model_types = ["dropout", "bnn", "ensemble", "bootstrap"]
@@ -111,12 +102,7 @@ def evaluate_models(X, y_normalized, y_min, y_max, y_true, y_16, y_84):
 
 # Function to visualize uncertainty results
 def plot_uncertainty_results(y_true, y_16, y_84, results, y_min, y_max):
-    """Plot true vs predicted values with uncertainty bars for each model type.
-    
-    Visualization of model uncertainty provides insights into prediction confidence. 
-    The use of error bars and perfect prediction lines helps validate model performance and 
-    highlights discrepancies. This is essential for assessing if model uncertainty estimates 
-    align with actual data variability.
+    """Plot original vs predicted values with uncertainty bars for each model type.
     """
     # Set font size for all plots
     plt.rcParams.update({'font.size': 16})
@@ -145,8 +131,8 @@ def plot_uncertainty_results(y_true, y_16, y_84, results, y_min, y_max):
         ax.set_ylim([y_min, y_max])
         
         # Label axes and add title
-        ax.set_xlabel('Original Values')
-        ax.set_ylabel('Predicted Values')
+        ax.set_xlabel('Original Values [log Msun]')
+        ax.set_ylabel('Predicted Values [log Msun]')
         ax.set_title(f'{model_type.upper()} Uncertainty')
         ax.legend()
 
@@ -160,9 +146,6 @@ def main():
     """
     Main function to load data, preprocess it, evaluate models with uncertainty estimation, 
     and visualize the results.
-    
-    This workflow integrates data loading, preprocessing, model evaluation, and visualization.
-    Each step contributes to a reliable uncertainty quantification framework for the model's predictions.
     """
     # Load data (images and target values)
     images, y_16, y_true, y_84 = load_data()

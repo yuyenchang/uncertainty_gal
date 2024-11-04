@@ -49,22 +49,15 @@ uncertainty_gal/
 ├── _table.txt                  # Metadata and target values for images
 ├── _img/                       # Directory containing galaxy image files in FITS format
 ├── requirements.txt            # List of required packages
-└── uncertainty_gal.png         # Plot showing predicted vs. actual values with uncertainty
+└── uncertainty_gal.png         # Plot showing predicted vs. original values with uncertainty
  ```
-
-## Features
-
-- **Data Preprocessing**: Loads and normalizes galaxy images from FITS files.
-- **Deep Learning Models**: Implements convolutional neural networks (CNNs) for regression tasks.
-- **Uncertainty Estimation**: Supports various methods, including dropout, Bayesian neural networks, ensemble, and bootstrap.
-- **Visualization**: Plots true vs. predicted values with uncertainty intervals.
 
 ## Uncertainty Estimation Methods
 This project includes the following methods for uncertainty estimation:
 
 1. **Dropout**: Monte Carlo Dropout to estimate uncertainty by randomly dropping neurons during inference.
 2. **Bayesian Neural Network (BNN)**: Uses Bayesian layers (DenseFlipout) for uncertainty estimation.
-3. **Ensemble**: Trains multiple models and computes the variance in predictions.
+3. **Ensemble**: Trains multiple models and computes the uncertainty in predictions.
 4. **Bootstrap**: Uses resampling techniques to estimate the uncertainty of predictions.
 
 ## Results
